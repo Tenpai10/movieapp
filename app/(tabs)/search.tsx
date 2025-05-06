@@ -1,6 +1,7 @@
 import MovieCard from '@/components/MovieCard';
 import SearchBar from '@/components/SearchBar';
 import { fetchMovies } from '@/services/api';
+import { updateSearchCount } from '@/services/appwrite';
 import useFetch from '@/services/useFetch';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View } from 'react-native';
@@ -21,13 +22,18 @@ const Search = () => {
 
 
   useEffect(() => {
+
     const timeoutId = setTimeout(async () => {
       if (searchQuery) {
         await loadMovies();
+
+        if (movies?.results.length > 0 && movies?.results[0])
+          await updateSearchCount(searchQuery, movies?.results[0] as Movie);
+
       } else {
         reset()
       }
-    })
+    }, 500)
 
     return () => clearTimeout(timeoutId)
   }, [searchQuery])
