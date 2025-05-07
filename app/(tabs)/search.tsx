@@ -8,6 +8,7 @@ import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
+
   const {
     data: movies,
     loading: loading,
@@ -26,10 +27,6 @@ const Search = () => {
     const timeoutId = setTimeout(async () => {
       if (searchQuery) {
         await loadMovies();
-
-        if (movies?.results.length > 0 && movies?.results[0])
-          await updateSearchCount(searchQuery, movies?.results[0] as Movie);
-
       } else {
         reset()
       }
@@ -38,14 +35,20 @@ const Search = () => {
     return () => clearTimeout(timeoutId)
   }, [searchQuery])
 
+  useEffect(() => {
+    const func = async () => {
+      if (movies?.results.length > 0 && movies?.results[0])
+        await updateSearchCount(searchQuery, movies?.results[0] as Movie);
+    }
+
+    func();
+  }, [movies])
+
   return (
-
-
-
     <View className='flex-1 bg-background'>
       <View className="h-10 w-10 rounded-full bg-slate-500 mt-20 mb-5 mx-auto" />
       <FlatList
-        ListEmptyComponent={<Text className="text-sm text-white">Start typing to search for a movie</Text>}
+        ListEmptyComponent={<Text className="text-sm text-gray-500 mx-2 my-4 text-center">Start typing to display movies</Text>}
         data={movies?.results ?? []}
         keyExtractor={(item) => item.id.toString()}
         numColumns={3}
@@ -72,12 +75,11 @@ const Search = () => {
               <Text className='text-red-500 px-5 my-4'>Error: {error.message}</Text>
             )}
             {!loading && !error && searchQuery?.trim() && movies?.results.length > 0 && (
-              <Text className='text-white text-lg my-4'>Search results for:
+              <View className=' my-4'>
+                <Text className='text-white text-lg'>Search results for:</Text>
                 <Text className='font-bold text-primary'> {searchQuery}</Text>
-              </Text>
+              </View>
             )}
-
-
           </View>
         }
       />
