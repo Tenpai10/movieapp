@@ -2,16 +2,14 @@ import { icons } from '@/constants/icons';
 import React from 'react';
 import { Image, TextInput, View } from 'react-native';
 
-interface SearchProps {
+type SearchProps = {
   placeholder: string;
   onPress?: () => void;
-  value: string;
+  value?: string;
   onChangeText?: (text: string) => void;
 }
 
 const SearchBar = ({ placeholder, onPress, value, onChangeText }: SearchProps) => {
-
-
 
   return (
     <View className='flex-row items-center gap-2 bg-dark-200 rounded-full px-5 py-4'>
