@@ -1,11 +1,16 @@
+type GenreInfo = {
+  id: number;
+  name: string;
+};
 interface Movie {
   id: number;
   title: string;
   adult: boolean;
   backdrop_path: string;
-  genre_ids: number[];
+  genres: GenreInfo[];
   original_language: string;
   original_title: string;
+  runtime: number;
   overview: string;
   popularity: number;
   poster_path: string;
